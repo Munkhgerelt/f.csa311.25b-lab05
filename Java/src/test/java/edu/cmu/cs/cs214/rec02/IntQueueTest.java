@@ -1,8 +1,5 @@
 package edu.cmu.cs.cs214.rec02;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -52,21 +54,23 @@ public class IntQueueTest {
 
     @Test
     public void testNotEmpty() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+        IntQueue queue = new ArrayIntQueue();
+        queue.enqueue(1);
+        assertFalse(queue.isEmpty());  // Check if queue is not empty
     }
 
     @Test
     public void testPeekEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
-    }
+        IntQueue queue = new ArrayIntQueue();
+        assertNull(queue.peek());  // Check if peek returns null when queue is empty
+    }    
 
     @Test
     public void testPeekNoEmptyQueue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
-    }
+        IntQueue queue = new ArrayIntQueue();
+        queue.enqueue(5);
+        assertEquals(Integer.valueOf(5), queue.peek());  // Check if peek returns correct value
+    }    
 
     @Test
     public void testEnqueue() {
@@ -79,10 +83,19 @@ public class IntQueueTest {
     }
 
     @Test
-    public void testDequeue() {
-        // TODO: write your own unit test
-        fail("Test not implemented");
+    public void testDequeueEmptyQueue() {
+        IntQueue queue = new ArrayIntQueue();
+        assertNull(queue.dequeue()); // If dequeue() returns null when empty
     }
+    
+    @Test
+    public void testDequeueOrder() {
+        IntQueue queue = new ArrayIntQueue();
+        queue.enqueue(10);
+        queue.enqueue(20);
+        assertEquals(Integer.valueOf(10), queue.dequeue()); // First in, first out
+        assertEquals(Integer.valueOf(20), queue.dequeue()); // Next element
+    }    
 
     @Test
     public void testContent() throws IOException {
@@ -105,5 +118,32 @@ public class IntQueueTest {
         }
     }
 
+    @Test
+    public void testClear() {
+        IntQueue queue = new ArrayIntQueue();
+        queue.enqueue(1);
+        queue.enqueue(2);
+        queue.clear();
+        assertTrue(queue.isEmpty()); // Queue should be empty after clear
+    }
 
+    @Test
+    public void testSize() {
+        IntQueue queue = new ArrayIntQueue();
+        assertEquals(0, queue.size());
+        queue.enqueue(1);
+        assertEquals(1, queue.size());
+        queue.enqueue(2);
+        assertEquals(2, queue.size());
+    }
+
+    @Test
+    public void testEnsureCapacity() {
+        IntQueue queue = new ArrayIntQueue();
+        for (int i = 0; i < 100; i++) { // Assuming default capacity is small
+            queue.enqueue(i);
+        }
+        assertEquals(100, queue.size()); // Ensure all elements are stored
+    }
+    
 }

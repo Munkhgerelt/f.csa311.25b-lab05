@@ -45,6 +45,7 @@ public class ArrayIntQueue implements IntQueue {
     }
 
     /** {@inheritDoc} */
+    @Override
     public void clear() {
         Arrays.fill(elementData, 0);
         size = 0;
@@ -52,6 +53,7 @@ public class ArrayIntQueue implements IntQueue {
     }
 
     /** {@inheritDoc} */
+    @Override
     public Integer dequeue() {
         if (isEmpty()) {
             return null;
@@ -63,6 +65,7 @@ public class ArrayIntQueue implements IntQueue {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean enqueue(Integer value) {
         ensureCapacity();
         int tail = (head + size) % elementData.length;
@@ -72,16 +75,19 @@ public class ArrayIntQueue implements IntQueue {
     }
 
     /** {@inheritDoc} */
+    @Override
     public boolean isEmpty() {
-        return size >= 0;
+        return size == 0;
     }
 
     /** {@inheritDoc} */
+    @Override
     public Integer peek() {
-        return elementData[head];
+        return isEmpty() ? null : elementData[head];
     }
 
     /** {@inheritDoc} */
+    @Override
     public int size() {
         return size;
     }
@@ -95,14 +101,11 @@ public class ArrayIntQueue implements IntQueue {
             int oldCapacity = elementData.length;
             int newCapacity = 2 * oldCapacity + 1;
             int[] newData = new int[newCapacity];
-            for (int i = head; i < oldCapacity; i++) {
-                newData[i - head] = elementData[i];
-            }
-            for (int i = 0; i < head; i++) {
-                newData[head - i] = elementData[i];
+            for (int i = 0; i < size; i++) {
+                newData[i] = elementData[(head + i) % oldCapacity];
             }
             elementData = newData;
-            head = 0;
+            head = 0;            
         }
     }
 }
