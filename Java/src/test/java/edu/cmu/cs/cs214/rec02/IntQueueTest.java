@@ -124,7 +124,7 @@ public class IntQueueTest {
         queue.enqueue(1);
         queue.enqueue(2);
         queue.clear();
-        assertFalse(queue.isEmpty()); // Queue should be empty after clear
+        assertTrue(queue.isEmpty()); // Queue should be empty after clear
     }
 
     @Test
