@@ -1,0 +1,44 @@
+name: Run Java Maven Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+
+      - name: Build and Run Tests
+        run: mvn clean test -f ./Java/pom.xml
+
+      - name: Generate JaCoCo Coverage Report
+        run: mvn jacoco:report -f ./Java/pom.xml
+
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: Java/target/site/jacoco/
+
+      - name: Upload Surefire Test Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: Java/target/surefire-reports/
+
+      - name: Display Test Results in Logs
+        if: always()
+        run: cat Java/target/surefire-reports/*.txt || true
